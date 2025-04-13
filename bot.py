@@ -9,8 +9,8 @@ bot = telebot.TeleBot(TOKEN)
 media_queue = queue.Queue()
 
 # Временной интервал публикаций
-START_TIME = dt_time(10, 0)  # 10:00
-END_TIME = dt_time(23, 0)    # 23:00
+START_TIME = dt_time(10, 0)  # 8:00
+END_TIME = dt_time(23, 0)    # 21:00
 
 # Функция проверки времени (разрешено ли публиковать сейчас)
 def is_time_allowed():
