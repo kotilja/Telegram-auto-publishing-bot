@@ -8,9 +8,7 @@ from config import TOKEN, YOUR_USER_ID, CHANNEL_ID, POST_INTERVAL, HASHTAG
 bot = telebot.TeleBot(TOKEN)
 media_queue = queue.Queue()
 
-# Временной интервал публикаций
-START_TIME = dt_time(8, 0)  # 8:00
-END_TIME = dt_time(21, 0)    # 21:00
+
 
 # Функция проверки времени (разрешено ли публиковать сейчас)
 def is_time_allowed():
@@ -23,10 +21,10 @@ def is_time_allowed():
 def wait_until_allowed():
     now = datetime.now()
     if now.time() >= END_TIME:
-        # Ждём до завтра до 10:00
+        # Ждём до завтра до {START_TIME}
         tomorrow = datetime.combine(now.date(), START_TIME) + timedelta(days=1)
     else:
-        # Ждём сегодня до 10:00
+        # Ждём сегодня до {START_TIME}
         tomorrow = datetime.combine(now.date(), START_TIME)
     seconds_to_wait = (tomorrow - now).total_seconds()
     print(f"⏳ Ждём {int(seconds_to_wait // 60)} минут до 10:00...")
