@@ -40,7 +40,7 @@ def publish_worker():
             if file_type == 'photo':
                 bot.send_photo(CHANNEL_ID, file_id, caption=HASHTAG)
             elif file_type == 'video':
-                bot.send_video(CHANNEL_ID, file_id, caption=HASHTAG)
+                bot.send_video(CHANNEL_ID, file_id, caption="#ea7webm")
             print(f"✅ Опубликовано {file_type}")
         except Exception as e:
             print(f"❌ Ошибка при публикации: {e}")
