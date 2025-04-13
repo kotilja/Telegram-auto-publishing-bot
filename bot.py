@@ -2,32 +2,29 @@ import telebot
 import threading
 import queue
 import time
-from datetime import timedelta, datetime, time as dt_time
-from config import TOKEN, YOUR_USER_ID, CHANNEL_ID, POST_INTERVAL, HASHTAG
+from datetime import timedelta, datetime
+from config import TOKEN, YOUR_USER_ID, CHANNEL_ID, POST_INTERVAL, HASHTAG, START_TIME, END_TIME
 
 bot = telebot.TeleBot(TOKEN)
 media_queue = queue.Queue()
 
-
-
 # Функция проверки времени (разрешено ли публиковать сейчас)
 def is_time_allowed():
     now = datetime.now().time()
-    if START_TIME <= now < END_TIME:
-        return True
-    return False
+    return START_TIME <= now < END_TIME
 
 # Время ожидания до разрешённого интервала
 def wait_until_allowed():
     now = datetime.now()
     if now.time() >= END_TIME:
-        # Ждём до завтра до {START_TIME}
         tomorrow = datetime.combine(now.date(), START_TIME) + timedelta(days=1)
     else:
-        # Ждём сегодня до {START_TIME}
         tomorrow = datetime.combine(now.date(), START_TIME)
+    
     seconds_to_wait = (tomorrow - now).total_seconds()
-    print(f"⏳ Ждём {int(seconds_to_wait // 60)} минут до 10:00...")
+    minutes = int(seconds_to_wait // 60)
+    wait_until = tomorrow.strftime('%H:%M')
+    print(f"⏳ Ждём {minutes} минут до {wait_until}...")
     time.sleep(seconds_to_wait)
 
 # Функция публикации из очереди с учётом временных рамок
@@ -43,7 +40,7 @@ def publish_worker():
             if file_type == 'photo':
                 bot.send_photo(CHANNEL_ID, file_id, caption=HASHTAG)
             elif file_type == 'video':
-                bot.send_video(CHANNEL_ID, file_id, caption="#ea7webm")
+                bot.send_video(CHANNEL_ID, file_id, caption=HASHTAG)
             print(f"✅ Опубликовано {file_type}")
         except Exception as e:
             print(f"❌ Ошибка при публикации: {e}")
